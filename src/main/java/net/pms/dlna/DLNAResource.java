@@ -1261,7 +1261,7 @@ public abstract class DLNAResource extends HTTPResource implements Cloneable, Ru
   protected String getExtension(String mime) {
     // TODO: get file extension based on mime
     // Here hard-code for PS4 for testing purpose
-    if (mime == "video/mpeg") {
+    if (mime.equals("video/mpeg")) {
       return "ts";
     }
     return null;
@@ -1694,8 +1694,8 @@ public abstract class DLNAResource extends HTTPResource implements Cloneable, Ru
         String mylog = String.format("MINEDBG: id=%s, ext=%s, format=%s, noName=%s,mime=%s, this: %s",
             id, ext, format, noName, mime, this.toString());
         logger.error(mylog);
-        if (mediaRenderer.isPS3() || mediaRenderer.isPS4()) {
-          // Append file extension for PS4, PS3 here is only for testing purpose
+        if (mediaRenderer.isPS4()) {
+          // Append file extension for PS4
           String extension = getExtension(mime);
           logger.error("MINEDBG: append extension for PS3/4: " + extension);
           if (extension != null) {
