@@ -556,6 +556,7 @@ public abstract class DLNAResource extends HTTPResource implements Cloneable, Ru
 						String name = getName();
 	
 						for (Player p : PlayerFactory.getAllPlayers()) {
+              // MINEDBG: TODO: check post fix here
 							String end = "[" + p.id() + "]";
 	
 							if (name.endsWith(end)) {
@@ -1252,6 +1253,20 @@ public abstract class DLNAResource extends HTTPResource implements Cloneable, Ru
 		return getURL("");
 	}
 
+  /**
+   * Get file extension by mime type
+   *
+   * @return the file extension string
+   */
+  protected String getExtension(String mime) {
+    // TODO: get file extension based on mime
+    // Here hard-code for PS4 for testing purpose
+    if (mime == "video/mpeg") {
+      return "ts";
+    }
+    return null;
+  }
+
 	/**
 	 * @return Returns a URL pointing to an image representing the item. If
 	 * none is available, "thumbnail0000.png" is used.
@@ -1676,6 +1691,18 @@ public abstract class DLNAResource extends HTTPResource implements Cloneable, Ru
 				}
 				endTag(sb);
 				sb.append(getFileURL());
+        String mylog = String.format("MINEDBG: id=%s, ext=%s, format=%s, noName=%s,mime=%s, this: %s",
+            id, ext, format, noName, mime, this.toString());
+        logger.error(mylog);
+        if (mediaRenderer.isPS3() || mediaRenderer.isPS4()) {
+          // Append file extension for PS4, PS3 here is only for testing purpose
+          String extension = getExtension(mime);
+          logger.error("MINEDBG: append extension for PS3/4: " + extension);
+          if (extension != null) {
+            sb.append(".");
+            sb.append(extension);
+          }
+        }
 				closeTag(sb, "res");
 			}
 		}
